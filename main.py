@@ -36,3 +36,10 @@ def delete_user(user_id: int):
         "message": "User deleted successfully",
         "user_id": user_id
     }
+@app.put("/users/{user_id}")
+def update_user(user_id: int, user: User):
+    return {
+        "message": "User updated successfully",
+        "user_id": user_id,
+        "user": user
+    }
