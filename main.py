@@ -25,7 +25,14 @@ class User(BaseModel):
 
 @app.post("/users")
 def create_user(user: User):
+    
     return {
         "message": "User created successfully",
         "user": user
+    }
+@app.delete("/users/{user_id}")
+def delete_user(user_id: int):
+    return {
+        "message": "User deleted successfully",
+        "user_id": user_id
     }
