@@ -171,7 +171,8 @@ def get_current_user_info(
 def update_user(
     user_id: int,
     user: UserCreate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
 ):
     existing_user = db.query(models.User).filter(
         models.User.id == user_id
@@ -181,6 +182,12 @@ def update_user(
         raise HTTPException(
             status_code=404,
             detail="User not found"
+        )
+
+    if existing_user.id != current_user.id:
+        raise HTTPException(
+            status_code=403,
+            detail="You can only update your own account"
         )
 
     existing_user.name = user.name
