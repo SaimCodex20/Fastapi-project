@@ -1,25 +1,49 @@
 # FastAPI Project
 
-A simple FastAPI backend project built with Python and FastAPI.
+A secure REST API backend built with Python, FastAPI, SQLAlchemy, SQLite, and JWT authentication.
 
 ## 🚀 Features
 
-- FastAPI backend
-- REST API endpoint
-- Automatic API documentation
-- Python virtual environment
-- Ready for further API development
+- User CRUD operations
+- User registration
+- Secure password hashing with bcrypt
+- JWT-based authentication
+- Login and logout endpoints
+- Protected user profile endpoint
+- Users can update their own account
+- Users cannot update or delete another user's account
+- Request validation with Pydantic
+- SQLAlchemy database integration
+- SQLite database
+- Automated API testing with pytest
+- Automatic interactive API documentation
 
 ## 🛠️ Technologies
 
 - Python
 - FastAPI
+- SQLAlchemy
+- SQLite
+- JWT
+- Passlib
+- Bcrypt
+- Pytest
+- HTTPX
 - Uvicorn
 
-## 📦 Installation
+## 📁 Project Structure
 
-Clone the repository:
-
-```bash
-git clone https://github.com/SaimCodex20/Fastapi-project.git
-cd Fastapi-project
+```text
+Fastapi-project/
+│
+├── main.py
+├── auth.py
+├── database.py
+├── models.py
+├── requirements.txt
+├── pytest.ini
+├── README.md
+├── tests/
+│   ├── conftest.py
+│   └── test_main.py
+└── .gitignore
