@@ -158,6 +158,13 @@ def login(
         "access_token": access_token,
         "token_type": "bearer"
     }
+@app.post("/logout")
+def logout(
+    current_user: models.User = Depends(get_current_user)
+):
+    return {
+        "message": "Logout successful"
+    }
 
 
 @app.get("/users/me", response_model=UserResponse)
