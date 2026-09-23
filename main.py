@@ -2,6 +2,7 @@ from fastapi import FastAPI, Depends, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel, ConfigDict
 from sqlalchemy.orm import Session
+from jose import JWTError
 
 import models
 from database import SessionLocal, engine
@@ -37,7 +38,7 @@ def get_current_user(
 
     try:
         payload = decode_access_token(token)
-    except Exception:
+    except JWTError:
         raise HTTPException(
             status_code=401,
             detail="Invalid or expired token"
@@ -158,6 +159,8 @@ def login(
         "access_token": access_token,
         "token_type": "bearer"
     }
+
+
 @app.post("/logout")
 def logout(
     current_user: models.User = Depends(get_current_user)
@@ -195,6 +198,17 @@ def update_user(
         raise HTTPException(
             status_code=403,
             detail="You can only update your own account"
+        )
+
+    duplicate_email = db.query(models.User).filter(
+        models.User.email == user.email,
+        models.User.id != current_user.id
+    ).first()
+
+    if duplicate_email:
+        raise HTTPException(
+            status_code=400,
+            detail="Email already registered"
         )
 
     existing_user.name = user.name
