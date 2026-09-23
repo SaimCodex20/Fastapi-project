@@ -309,3 +309,52 @@ def test_logout(client):
 
     assert response.status_code == 200
     assert response.json()["message"] == "Logout successful"
+
+def test_duplicate_email(client):
+    client.post(
+        "/users",
+        json={
+            "name": "First User",
+            "email": "duplicate@example.com",
+            "password": "Test123456"
+        }
+    )
+
+    response = client.post(
+        "/users",
+        json={
+            "name": "Second User",
+            "email": "duplicate@example.com",
+            "password": "Test123456"
+        }
+    )
+
+    assert response.status_code == 400
+    assert response.json()["detail"] == "Email already registered"
+
+def test_current_user_with_invalid_token(client):
+    response = client.get(
+        "/users/me",
+        headers={
+            "Authorization": "Bearer invalid-token"
+        }
+    )
+
+    assert response.status_code == 401
+
+def test_current_user_nonexistent_user(client):
+    from auth import create_access_token
+
+    token = create_access_token({
+        "user_id": 999999,
+        "email": "nonexistent@example.com"
+    })
+
+    response = client.get(
+        "/users/me",
+        headers={
+            "Authorization": f"Bearer {token}"
+        }
+    )
+
+    assert response.status_code == 401
